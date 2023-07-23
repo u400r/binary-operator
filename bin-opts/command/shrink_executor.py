@@ -6,8 +6,8 @@ from command.executor import Executor
 
 class ShrinkExecutor(Executor):
     @classmethod
-    def exec(cls, input):
-        return "Data"
+    def pre(cls, args):
+        return args.structure
 
     @classmethod
     def post(cls, output):

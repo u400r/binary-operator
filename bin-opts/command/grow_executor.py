@@ -7,10 +7,6 @@ import yaml
 
 
 class GrowExecutor(Executor):
-    @classmethod
-    def pre(cls):
-        buf = sys.stdin.read()
-        return yaml.safe_load(buf)
 
     @classmethod
     def exec(cls, input):

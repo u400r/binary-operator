@@ -2,7 +2,7 @@
 
 class Executor:
     @classmethod
-    def pre(cls):
+    def pre(cls, args):
         pass
 
     @classmethod
@@ -14,8 +14,8 @@ class Executor:
         pass
 
     @classmethod
-    def do(cls):
-        input = cls.pre()
+    def do(cls, args):
+        input = cls.pre(args)
         output = cls.exec(input)
         cls.post(output)
 

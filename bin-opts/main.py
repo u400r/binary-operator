@@ -10,7 +10,7 @@ def main():
     parser = define_parser()
     args = parser.parse_args()
     if hasattr(args, 'handler'):
-        args.handler()
+        args.handler(args)
     else:
         parser.print_help()
 
