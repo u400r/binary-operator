@@ -10,8 +10,9 @@
 
 from argparse import ArgumentParser
 
+from command.load_executor import LoadExecutor
+from command.dump_executor import DumpExecutor
 from command.show_executor import ShowExecutor
-
 from command.view_executor import ViewExecutor
 from command.shrink_executor import ShrinkExecutor
 from command.grow_executor import GrowExecutor
@@ -33,5 +34,7 @@ def define_parser():
     shrink.set_defaults(handler=ShrinkExecutor.do)
     list.set_defaults(handler=ViewExecutor.do)
     show.set_defaults(handler=ShowExecutor.do)
+    dump.set_defaults(handler=DumpExecutor.do)
+    load.set_defaults(handler=LoadExecutor.do)
 
     return parser
