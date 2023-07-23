@@ -10,5 +10,5 @@ class ShrinkExecutor(Executor):
         return args.structure
 
     @classmethod
-    def post(cls, output):
-        PythonGenerator.delete(output)
+    def exec(cls, input):
+        PythonGenerator.delete(input.__name__)

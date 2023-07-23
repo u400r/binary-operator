@@ -1,3 +1,4 @@
+import sys
 from command.executor import Executor
 
 
@@ -8,8 +9,9 @@ class LoadExecutor(Executor):
 
     @classmethod
     def exec(cls, input):
+        buf = sys.stdin.buffer.read()
         d = input()
-        d.load((0x0).to_bytes(length=248))
+        d.load(buf)
         return d
 
     @classmethod

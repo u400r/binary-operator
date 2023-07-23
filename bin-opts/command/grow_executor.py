@@ -10,12 +10,13 @@ class GrowExecutor(Executor):
 
     @classmethod
     def exec(cls, input):
+        buf = yaml.safe_load(sys.stdin.read())
         defs = []
-        if isinstance(input, list) or isinstance(input, tuple):
-            for element in input:
+        if isinstance(buf, list) or isinstance(buf, tuple):
+            for element in buf:
                 defs.append(Definition.load(**element))
         else:
-            defs.append(Definition.load(**input))
+            defs.append(Definition.load(**buf))
         return defs
 
     @classmethod
