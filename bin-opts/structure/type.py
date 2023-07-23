@@ -17,6 +17,12 @@ class TypeBase(ABC):
     def dump(self) -> bytearray:
         pass
 
+    def to_defs(self):
+        if self.__name__:
+            return {"name": self.__name__}
+        else:
+            return {}
+
     def __len__(self):
         pass
 
@@ -46,6 +52,9 @@ class PrimitiveType(TypeBase):
 
     def dump(self) -> bytearray:
         return self._data
+
+    def to_defs(self):
+        return {**super().to_defs(), **{"type": self.__class__.__name__}}
 
     def __len__(self):
         return self._size
@@ -127,6 +136,13 @@ class ArrayType(TypeBase, Sized):
     def raw(self):
         pass
 
+    def to_defs(self):
+        return {**super().to_defs(), **{
+            "type": "array",
+            "size": self._size,
+            "items": self._items[0].to_defs()
+        }}
+
     def __len__(self):
         return sum([len(item) for item in self._items])
 
@@ -160,6 +176,16 @@ class StructureType(TypeBase, Sized):
         else:
             _dict = children
         return _dict
+
+    def to_defs(self):
+        defs = {**super().to_defs(), **{
+            "type": "object",
+            "alias": self.__class__.__name__,
+            "parameters": []
+        }}
+        for parameter in self._parameters:
+            defs["parameters"].append(parameter.to_defs())
+        return defs
 
     def __len__(self):
         return sum([len(p) for p in self._parameters])

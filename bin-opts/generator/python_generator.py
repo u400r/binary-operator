@@ -48,7 +48,7 @@ class PythonGenerator(Generator):
     base_path = Path(__file__).parent.joinpath("../generated/")
 
     @classmethod
-    def dumpast(cls, class_ast, path, debug=True):
+    def dumpast(cls, class_ast, path, debug=False):
         if debug:
             print(ast.dump(class_ast, indent=4))
         with open(path, "w") as f:

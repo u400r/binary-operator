@@ -20,7 +20,6 @@ class GrowExecutor(Executor):
                 defs.append(Definition.load(**element))
         else:
             defs.append(Definition.load(**input))
-        print(yaml.dump(defs[0].to_dict()))
         return defs
 
     @classmethod

@@ -10,6 +10,8 @@
 
 from argparse import ArgumentParser
 
+from command.show_executor import ShowExecutor
+
 from command.view_executor import ViewExecutor
 from command.shrink_executor import ShrinkExecutor
 from command.grow_executor import GrowExecutor
@@ -22,6 +24,7 @@ def define_parser():
     grow = subparser.add_parser("grow")
     shrink = subparser.add_parser("shrink")
     list = subparser.add_parser(name="list")
+    show = subparser.add_parser(name="show")
     defs = subparser.add_parser("defs")
     dump = subparser.add_parser("dump")
     load = subparser.add_parser("load")
@@ -29,5 +32,6 @@ def define_parser():
     grow.set_defaults(handler=GrowExecutor.do)
     shrink.set_defaults(handler=ShrinkExecutor.do)
     list.set_defaults(handler=ViewExecutor.do)
+    show.set_defaults(handler=ShowExecutor.do)
 
     return parser
