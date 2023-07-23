@@ -47,8 +47,8 @@ class PrimitiveType(TypeBase):
     def raw(self) -> bytearray:
         return self._data
 
-    def load(self,  data: bytes, pos: int = 0):
-        self._data[:] = data[pos:pos+self._size]
+    def load(self, data: bytes, pos: int = 0):
+        self._data[:] = data[pos:pos + self._size]
 
     def dump(self) -> bytearray:
         return self._data

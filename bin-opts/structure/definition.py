@@ -49,7 +49,7 @@ class Definition():
     def dump(self):
         print(yaml.dump(self.to_dict()))
 
-    def make_node(self):
+    def to_ast_node(self):
         pass
 
 
@@ -69,9 +69,9 @@ class PrimitiveDefinition(Definition):
 
     def instantiate(self):
         return Call(
-                func=Name(id=self.type.__name__, ctx=Load()),
-                args=[Constant(value=self.name)], keywords=[]
-            )
+            func=Name(id=self.type.__name__, ctx=Load()),
+            args=[Constant(value=self.name)], keywords=[]
+        )
 
 
 class ArrayDefinition(Definition):
@@ -102,20 +102,21 @@ class ArrayDefinition(Definition):
         _dict["items"] = self.items.to_dict()
         return _dict
 
-    def make_node(self):
-        return self.items.make_node()
+    def to_ast_node(self):
+        return self.items.to_ast_node()
 
     def instantiate(self):
         return Call(
-                func=Name(id="ArrayType", ctx=Load()),
-                args=[
-                    Attribute(
-                        value=Name(id='self', ctx=Load()),
-                        attr=self.items.alias, ctx=Load()
-                    )
-                    if isinstance(self.items, StructureDefinition)
-                    else Name(id=self.items.type.__name__, ctx=Load()),
-                    Constant(value=self.size), Constant(value=self.name)], keywords=[]
+            func=Name(id="ArrayType", ctx=Load()),
+            args=[
+                Attribute(
+                    value=Name(id='self', ctx=Load()),
+                    attr=self.items.alias, ctx=Load()
+                )
+                if isinstance(self.items, StructureDefinition)
+                else Name(id=self.items.type.__name__, ctx=Load()),
+                Constant(value=self.size), Constant(value=self.name)],
+            keywords=[]
         )
 
 
@@ -171,7 +172,7 @@ class StructureDefinition(Definition):
                             value=Name(id='self', ctx=Load()),
                             attr=p.name,
                             ctx=Store())
-                        ],
+                    ],
                     value=p.instantiate()
                 ) for p in self.parameters] + [
                 Assign(
@@ -198,22 +199,22 @@ class StructureDefinition(Definition):
             ],
             decorator_list=[])
 
-    def make_node(self):
+    def to_ast_node(self) -> ClassDef:
         return ClassDef(
             name=self.alias,
-            body=[p.make_node() for p in self.parameters if p.make_node()] + [
+            body=[p.to_ast_node() for p in self.parameters if p.to_ast_node()] + [
                 self.make_constructor()],
             decorator_list=[],
             bases=[
                 Name(id='StructureType', ctx=Load())
-                   ],
+            ],
             keywords=[],
         )
 
     def instantiate(self):
         return Call(
-                func=Attribute(
-                    value=Name(id='self', ctx=Load()),
-                    attr=self.alias, ctx=Load()),
-                args=[Constant(value=self.name)], keywords=[]
-            )
+            func=Attribute(
+                value=Name(id='self', ctx=Load()),
+                attr=self.alias, ctx=Load()),
+            args=[Constant(value=self.name)], keywords=[]
+        )
